@@ -6,8 +6,10 @@ cmake_minimum_required(VERSION 3.4.1)
 
 
 #set(CMAKE_VERBOSE_MAKEFILE on)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -fexceptions -frtti")
+
 set(libs3rd "${CMAKE_SOURCE_DIR}/lib3rd")
-#include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
+include_directories(${libs3rd}/include)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -27,9 +29,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/RtmpPusher.cpp
               )
 
-add_library( librtmp
-             STATIC
-             IMPORTED )
+add_library( librtmp    STATIC  IMPORTED )
 
 set_target_properties( # Specifies the target library.
                        librtmp
