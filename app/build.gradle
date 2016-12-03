@@ -1,0 +1,129 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
+    defaultConfig {
+        applicationId "com.example.rd0394.rtmpdemo"
+        minSdkVersion 21
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // This block is different from the one you use to link Gradle
+        // to your CMake build script.
+        externalNativeBuild {
+            cmake {
+                // https://developer.android.com/ndk/guides/cmake.html
+
+                // configure certain NDK-specific variables that change the way CMake builds your native libraries
+
+                // To pass an argument to CMake from your module-level build.gradle file
+
+                // Use the following syntax when passing arguments to variables:
+                // arguments "-DVAR_NAME=VALUE"
+
+                // arguments "-DANDROID_ARM_NEON=TRUE", "-DANDROID_TOOLCHAIN=clang"
+                // ANDROID_ARM_MODE     ANDROID_ARM_NEON
+                // ANDROID_CPP_FEATURES
+                // ANDROID_STL (By default, CMake uses gnustl_static.)
+                // ANDROID_TOOLCHAIN    clang (default)
+                // ANDROID_PLATFORM     android-18
+
+                // Sets optional flags for the C compiler.
+                // cFlags "-D_EXAMPLE_C_FLAG1", "-D_EXAMPLE_C_FLAG2"
+
+                // Sets a flag to enable format macro constants for the C++ compiler.
+                // cppFlags "-std=c++11","-frtti", "-fexceptions"
+                cppFlags "-frtti -fexceptions"
+
+            }
+
+            // Cmake 使用 CMakeLists.txt
+            // or ndkBuild {...}
+            // 使用  ndk-build script file (Android.mk)
+        }
+        ndk {
+            // Specifies the ABI configurations of your native
+            // libraries Gradle should build and package with your APK.
+            // 'x86', 'x86_64',
+            abiFilters  'armeabi', 'armeabi-v7a', 'arm64-v8a'
+
+        }
+        /*
+           sourceSets.main {
+               //jni.srcDirs = []
+               jniLibs.srcDirs = ['lib3rd']
+           }
+
+           sourceSets {
+               main {
+                   jniLibs.srcDirs = ['CustomJNILibs','StreamerJNILibs']
+               }
+           }
+
+            在Eclipse上 Java, AIDL and RenderScript 都在同一个src目录下 所以
+             sourceSets {
+                main {
+                    manifest.srcFile 'AndroidManifest.xml'
+                    java.srcDirs = ['src']
+                    resources.srcDirs = ['src']
+                    aidl.srcDirs = ['src']
+                    renderscript.srcDirs = ['src']
+                    res.srcDirs = ['res']
+                    assets.srcDirs = ['assets']
+                }
+                androidTest.setRoot('tests') //  moves src/androidTest/* to tests/*
+              }
+
+        */
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+/*
+    productFlavors {
+        app {
+            externalNativeBuild {
+                cmake {
+                    // Specifies which native libraries to build and package for this
+                    // product flavor. If you don't configure this property, Gradle
+                    // builds and packages all shared object libraries that you define
+                    // in your CMake or ndk-build project.
+                    targets "native-rtmp"
+                }
+            }
+        }
+
+        // 其他模块
+        paid {
+            ...
+            externalNativeBuild {
+                cmake {
+                    ...
+                    targets "native-lib-paid"
+                }
+            }
+        }
+    }
+*/
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    testCompile 'junit:junit:4.12'
+}
